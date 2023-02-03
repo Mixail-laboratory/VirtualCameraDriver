@@ -355,6 +355,14 @@ public:
 
         BOOLEAN Parity = (((*ImageLocation - m_SynthesisBuffer) & 0x2) != 0);
 
+        
+
+        UCHAR Y = (color[0] / 4) +  (color[1] / 4) + (color[2] / 10) + 16;
+        UCHAR U = (color[0]*(-1)/7) - (2* color[1] /7) +( 3 * color[2] /7) + 128;
+        UCHAR V = (3* color[0] /7) - (5 * color[1] /14) - (color[2] / 13) + 128;
+
+        UCHAR tranformColor[3] = { Y,U,V };
+
 #if DBG
         //
         // Check that the current pixel points to a valid start pixel
@@ -364,13 +372,13 @@ public:
         NT_ASSERT ((m_Parity && Odd) || (!m_Parity && !Odd));
 #endif // DBG
 
-        
+            
             if (Parity) {
-                *(*ImageLocation)++ = color[2];
+                *(*ImageLocation)++ = tranformColor[2];
             } else {
-                *(*ImageLocation)++ = color[1];
-                *(*ImageLocation)++ = color[0];
-                *(*ImageLocation)++ = color[1];
+                *(*ImageLocation)++ = tranformColor[1];
+                *(*ImageLocation)++ = tranformColor[0];
+                *(*ImageLocation)++ = tranformColor[1];
             }
        
     }
@@ -387,14 +395,20 @@ public:
         )
 
     {
+        UCHAR Y = (color[0] / 4) + (color[1] / 4) + (color[2] / 10) + 16;
+        UCHAR U = (color[0] * (-1) / 7) - (2 * color[1] / 7) + (3 * color[2] / 7) + 128;
+        UCHAR V = (3 * color[0] / 7) - (5 * color[1] / 14) - (color[2] / 13) + 128;
+
+        UCHAR tranformColor[3] = { Y,U,V };
+
 
         
             if (m_Parity) {
-                *m_Cursor++ = color[2];
+                *m_Cursor++ = tranformColor[2];
             } else {
-                *m_Cursor++ = color[1];
-                *m_Cursor++ = color[0];
-                *m_Cursor++ = color[1];
+                *m_Cursor++ = tranformColor[1];
+                *m_Cursor++ = tranformColor[0];
+                *m_Cursor++ = tranformColor[1];
             }
         
         m_Parity = !m_Parity;
