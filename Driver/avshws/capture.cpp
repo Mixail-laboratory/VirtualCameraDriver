@@ -42,10 +42,10 @@
 #endif // ALLOC_PRAGMA
 
 //OG: 320x240
-#define DMAX_X 1280
-#define DMAX_Y 720
-#define D_X 1280
-#define D_Y 720
+#define DMAX_X 1920
+#define DMAX_Y 1080
+#define D_X 1920
+#define D_Y 1080
 
 CCapturePin::
 CCapturePin (
