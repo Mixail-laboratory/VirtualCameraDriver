@@ -299,32 +299,6 @@ UCHAR g_FontData [256][8] = {
 // Standard definition of EIA-189-A color bars.  The actual color definitions
 // are either in CRGB24Synthesizer or CYUVSynthesizer.
 //
-const COLOR g_ColorBars[] = 
-    {WHITE, YELLOW, CYAN, GREEN, MAGENTA, RED, BLUE, BLACK};
-
-const UCHAR CRGB24Synthesizer::Colors [MAX_COLOR][3] = {
-    {0, 0, 0},          // BLACK
-    {255, 255, 255},    // WHITE
-    {0, 255, 255},      // YELLOW
-    {255, 255, 0},      // CYAN
-    {0, 255, 0},        // GREEN
-    {255, 0, 255},      // MAGENTA
-    {0, 0, 255},        // RED
-    {255, 0, 0},        // BLUE
-    {128, 128, 128}     // GREY
-};
-
-const UCHAR CYUVSynthesizer::Colors [MAX_COLOR][3] = {
-    {128, 16, 128},     // BLACK
-    {128, 235, 128},    // WHITE
-    {16, 211, 146},     // YELLOW
-    {166, 170, 16},     // CYAN
-    {54, 145, 34},      // GREEN
-    {202, 106, 222},    // MAGENTA
-    {90, 81, 240},      // RED
-    {240, 41, 109},     // BLUE
-    {128, 125, 128},    // GREY
-};
 
 /**************************************************************************
 
@@ -360,8 +334,7 @@ Return Value:
 --*/
 
 {
-    const COLOR *CurColor = g_ColorBars;
-    ULONG ColorCount = SIZEOF_ARRAY (g_ColorBars);
+   
 
     //
     // Set the default cursor...
@@ -371,25 +344,11 @@ Return Value:
     //
     // Synthesize a single line.
     //
-    PUCHAR ImageStart = m_Cursor;
-    for (ULONG x = 0; x < m_Width; x++) 
-        PutPixel (g_ColorBars [((x * ColorCount) / m_Width)]);
+ 
+}
 
-    PUCHAR ImageEnd = m_Cursor;
-    
-    //
-    // Copy the synthesized line to all subsequent lines.
-    //
-    for (ULONG line = 1; line < m_Height; line++) {
-
-        GetImageLocation (0, line);
-
-        RtlCopyMemory (
-            m_Cursor,
-            ImageStart,
-            ImageEnd - ImageStart
-            );
-    }
+void CImageSynthesizer::DrawFrame()
+{
 }
 
 /*************************************************/
@@ -401,9 +360,8 @@ OverlayText (
     _In_ ULONG LocX,
     _In_ ULONG LocY,
     _In_ ULONG Scaling,
-    _In_ LPSTR Text,
-    _In_ COLOR BgColor,
-    _In_ COLOR FgColor
+    _In_ LPSTR Text
+
     )
 
 /*++
@@ -511,11 +469,7 @@ Return Value:
     //
     // Overlay a background color row.
     //
-    if (BgColor != TRANSPARENT && SpaceY) {
-        for (ULONG x = 0; x < LenX && x < SpaceX; x++) {
-            PutPixel (BgColor);
-        }
-    }
+   
     LocY++;
     if (SpaceY) SpaceY--;
 
@@ -531,43 +485,13 @@ Return Value:
         PUCHAR ImageStart = m_Cursor;
 
         ULONG CurSpaceX = SpaceX;
-        if (CurSpaceX) {
-            PutPixel (BgColor);
-            CurSpaceX--;
-        }
+       
 
         //
         // Generate the row'th row of the overlay.
         //
         CurChar = Text;
-        while (CurChar && *CurChar) {
-            
-            UCHAR CharBase = g_FontData [*CurChar++][row];
-            for (ULONG mask = 0x80; mask && CurSpaceX; mask >>= 1) {
-                for (ULONG scale = 0; scale < Scaling && CurSpaceX; scale++) {
-                    if (CharBase & mask) {
-                        PutPixel (FgColor);
-                    } else {
-                        PutPixel (BgColor);
-                    }
-                    CurSpaceX--;
-                }
-            }
-
-            // 
-            // Separate each character by one space.  Account for the border
-            // space at the end by placing the separator after the last 
-            // character also.
-            //
-            #ifndef NO_CHARACTER_SEPARATION
-                if (CurSpaceX) {
-                    PutPixel (BgColor);
-                    CurSpaceX--;
-                }
-            #endif // NO_CHARACTER_SEPARATION
-
-        }
-
+        
         //
         // If there is no separation character defined, account for the
         // border.
@@ -596,11 +520,7 @@ Return Value:
     // Add the bottom section of the overlay.
     //
     GetImageLocation (LocX, LocY);
-    if (BgColor != TRANSPARENT && SpaceY) {
-        for (ULONG x = 0; x < LenX && x < SpaceX; x++) {
-            PutPixel (BgColor);
-        }
-    }
+    
 
 }
 

@@ -31,22 +31,7 @@
 //
 // Pixel color for placement onto the synthesis buffer.
 //
-typedef enum {
 
-    BLACK = 0,
-    WHITE,
-    YELLOW,
-    CYAN,
-    GREEN,
-    MAGENTA,
-    RED,
-    BLUE,
-    GREY,
-
-    MAX_COLOR,
-    TRANSPARENT,
-
-} COLOR;
 
 //
 // POSITION_CENTER:
@@ -100,7 +85,7 @@ public:
     virtual void
     PutPixel (
         PUCHAR *ImageLocation,
-        COLOR Color
+        UCHAR color[2]
         ) = 0;
 
     //
@@ -114,10 +99,10 @@ public:
     //
     virtual void
     PutPixel (
-        COLOR Color
-        )
+        UCHAR color[2]
+    )
     {
-        PutPixel (&m_Cursor, Color);
+        PutPixel (&m_Cursor, color);
     }
 
     virtual long
@@ -174,6 +159,8 @@ public:
     SynthesizeBars (
         );
 
+    void DrawFrame();
+
     //
     // OverlayText():
     //
@@ -184,9 +171,8 @@ public:
         _In_ ULONG LocX,
         _In_ ULONG LocY,
         _In_ ULONG Scaling,
-        _In_ LPSTR Text,
-        _In_ COLOR BgColor,
-        _In_ COLOR FgColor
+        _In_ LPSTR Text
+     
         );
 
     //
@@ -239,7 +225,6 @@ class CRGB24Synthesizer : public CImageSynthesizer {
 
 private:
 
-    const static UCHAR Colors [MAX_COLOR][3];
 
     BOOLEAN m_FlipVertical;
 
@@ -252,18 +237,15 @@ public:
     // reside within the synthesis buffer.
     //
     virtual void
-    PutPixel (
-        PUCHAR *ImageLocation,
-        COLOR Color
+        PutPixel(
+            PUCHAR* ImageLocation,
+            UCHAR color[3]
         )
     {
-        if (Color != TRANSPARENT) {
-            *(*ImageLocation)++ = Colors [(ULONG)Color][0];
-            *(*ImageLocation)++ = Colors [(ULONG)Color][1];
-            *(*ImageLocation)++ = Colors [(ULONG)Color][2];
-        } else {
-            *ImageLocation += 3;
-        }
+            *(*ImageLocation)++ = color[0];
+            *(*ImageLocation)++ = color[1];
+            *(*ImageLocation)++ = color[2];
+        
     }
 
     //
@@ -274,16 +256,13 @@ public:
     // 
     virtual void
     PutPixel (
-        COLOR Color
+        UCHAR color[3]
         )
     {
-        if (Color != TRANSPARENT) {
-            *m_Cursor++ = Colors [(ULONG)Color][0];
-            *m_Cursor++ = Colors [(ULONG)Color][1];
-            *m_Cursor++ = Colors [(ULONG)Color][2];
-        } else {
-            m_Cursor += 3;
-        }
+            *m_Cursor++ = color[0];
+            *m_Cursor++ = color[1];
+            *m_Cursor++ = color[2];
+        
     }
 
     virtual long
@@ -356,8 +335,7 @@ class CYUVSynthesizer : public CImageSynthesizer {
 
 private:
 
-    const static UCHAR Colors [MAX_COLOR][3];
-
+    
     BOOLEAN m_Parity;
 
 public:
@@ -371,7 +349,7 @@ public:
     virtual void
     PutPixel (
         PUCHAR *ImageLocation,
-        COLOR Color
+        UCHAR color[3]
         )
     {
 
@@ -386,18 +364,15 @@ public:
         NT_ASSERT ((m_Parity && Odd) || (!m_Parity && !Odd));
 #endif // DBG
 
-        if (Color != TRANSPARENT) {
+        
             if (Parity) {
-                *(*ImageLocation)++ = Colors [(ULONG)Color][2];
+                *(*ImageLocation)++ = color[2];
             } else {
-                *(*ImageLocation)++ = Colors [(ULONG)Color][1];
-                *(*ImageLocation)++ = Colors [(ULONG)Color][0];
-                *(*ImageLocation)++ = Colors [(ULONG)Color][1];
+                *(*ImageLocation)++ = color[1];
+                *(*ImageLocation)++ = color[0];
+                *(*ImageLocation)++ = color[1];
             }
-        } else {
-            *ImageLocation += (Parity ? 1 : 3);
-        }
-
+       
     }
 
     //
@@ -408,23 +383,20 @@ public:
     //
     virtual void
     PutPixel (
-        COLOR Color
+        UCHAR color[3]
         )
 
     {
 
-        if (Color != TRANSPARENT) {
+        
             if (m_Parity) {
-                *m_Cursor++ = Colors [(ULONG)Color][2];
+                *m_Cursor++ = color[2];
             } else {
-                *m_Cursor++ = Colors [(ULONG)Color][1];
-                *m_Cursor++ = Colors [(ULONG)Color][0];
-                *m_Cursor++ = Colors [(ULONG)Color][1];
+                *m_Cursor++ = color[1];
+                *m_Cursor++ = color[0];
+                *m_Cursor++ = color[1];
             }
-        } else {
-            m_Cursor += (m_Parity ? 1 : 3);
-        }
-
+        
         m_Parity = !m_Parity;
 
     }

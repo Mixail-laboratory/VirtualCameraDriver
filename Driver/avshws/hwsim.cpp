@@ -737,22 +737,6 @@ CHardwareSimulation::
 FakeHardware (
     )
 
-/*++
-
-Routine Description:
-
-    Simulate an interrupt and what the hardware would have done in the
-    time since the previous interrupt.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
 
 {
 
@@ -760,7 +744,8 @@ Return Value:
 
 	if (m_HardwareState == HardwareRunning)
 	{
-		RtlCopyMemory(m_SynthesisBuffer, m_TemporaryBuffer, m_ImageSize);
+         m_ImageSynth->SynthesizeBars();
+
 
 		if (!NT_SUCCESS(FillScatterGatherBuffers())) {
 			InterlockedIncrement(PLONG(&m_NumFramesSkipped));
