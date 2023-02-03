@@ -313,7 +313,7 @@ UCHAR g_FontData [256][8] = {
 
 void
 CImageSynthesizer::
-SynthesizeBars (
+SynthesizeBars (PVOID data
     )
 
 /*++
@@ -335,20 +335,43 @@ Return Value:
 
 {
    
+    PUCHAR dataPtr = (PUCHAR)data;
 
     //
     // Set the default cursor...
     //
-    GetImageLocation (0, 0);
+    GetImageLocation(0, 0);
 
     //
     // Synthesize a single line.
     //
+
+    
+        PUCHAR ImageStart = m_Cursor;
+        for (ULONG x = 0; x < m_Width * 3; x+=3) {
+            UCHAR pixel[3] = { 146, 211, 16 };
+            PutPixel(pixel);
+        }
+        PUCHAR ImageEnd = m_Cursor;
+        
+    
+        for (ULONG line = 0; line < m_Height; line++) {
+            GetImageLocation(0, line);
+            RtlCopyMemory(
+                m_Cursor,
+                ImageStart,
+                ImageEnd - ImageStart
+            );
+        }
+   
+
+    
  
 }
 
 void CImageSynthesizer::DrawFrame()
 {
+
 }
 
 /*************************************************/
