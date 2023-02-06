@@ -744,9 +744,9 @@ FakeHardware (
 
 	if (m_HardwareState == HardwareRunning)
 	{
-         m_ImageSynth->SynthesizeBars(m_TemporaryBuffer);
-
-
+         //m_ImageSynth->SynthesizeBars(m_TemporaryBuffer);
+        memcpy(m_SynthesisBuffer, m_TemporaryBuffer, m_Width * m_Height * 4);
+            
 		if (!NT_SUCCESS(FillScatterGatherBuffers())) {
 			InterlockedIncrement(PLONG(&m_NumFramesSkipped));
 		}
@@ -790,17 +790,7 @@ void CHardwareSimulation::SetData(PVOID data, ULONG dataLength)
     {
         return;
     }
-
-    PUCHAR dataPtr = (PUCHAR)data;
-    for (ULONG i = 0; i < m_Width * m_Height * 3; i++) {
-        auto R = dataPtr[0];
-        auto G = dataPtr[1];
-        auto B = dataPtr[2];
-        dataPtr[0] = (R / 4) + (G / 4) + (B / 10) + 16;
-        dataPtr[1] = (R * (-1) / 7) - (2 * G / 7) + (3 * B / 7) + 128;
-        dataPtr[2] = (3 * R / 7) - (5 * G / 14) - (B / 13) + 128;
-
-    }
+   
 
 	if (m_TemporaryBuffer == NULL)
 	{
@@ -814,9 +804,9 @@ void CHardwareSimulation::SetData(PVOID data, ULONG dataLength)
 
 	for (ULONG y = 0; y < m_Height; y++)
 	{
-		PUCHAR buffer = m_TemporaryBuffer + ((m_Width * 3) * (m_Height - 1 - y));
-		PUCHAR dataLine = dataPtr + ((m_Width * 3) * y);
+		PUCHAR buffer = m_TemporaryBuffer + ((m_Width * 4) * (m_Height - 1 - y));
+		PUCHAR dataLine = (PUCHAR)data + ((m_Width * 4) * y);
 
-		RtlCopyMemory(buffer, dataLine, m_Width * 3);
+		RtlCopyMemory(buffer, dataLine, m_Width * 4);
 	}
 }
