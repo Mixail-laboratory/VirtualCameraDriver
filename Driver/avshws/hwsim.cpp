@@ -807,7 +807,7 @@ void CHardwareSimulation::SetData(PVOID data, ULONG dataLength)
 		return;
 	}
 
-	if (dataLength < m_Width * m_Height * 3)
+	if (dataLength < m_Width * m_Height * 4)
 	{
 		return;
 	}

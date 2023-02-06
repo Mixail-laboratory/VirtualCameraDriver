@@ -221,7 +221,7 @@ public:
 
 *************************************************/
 
-class CRGB24Synthesizer : public CImageSynthesizer {
+class CRGB32Synthesizer : public CImageSynthesizer {
 
 private:
 
@@ -245,6 +245,8 @@ public:
             *(*ImageLocation)++ = color[2];
             *(*ImageLocation)++ = color[1];
             *(*ImageLocation)++ = color[0];
+            *(*ImageLocation)++ = 0xff;
+
         
     }
 
@@ -262,13 +264,14 @@ public:
             *m_Cursor++ = color[2];
             *m_Cursor++ = color[1];
             *m_Cursor++ = color[0];
+            *m_Cursor++ = 0xff;
         
     }
 
     virtual long
     GetBytesPerPixel () 
     {
-        return 3;
+        return 4;
     }
 
     virtual PUCHAR
@@ -279,12 +282,12 @@ public:
     {
         if (m_FlipVertical) {
             return (m_Cursor = 
-                (m_SynthesisBuffer + 3 * 
+                (m_SynthesisBuffer + 4 * 
                     (LocX + (m_Height - 1 - LocY) * m_Width))
                 );
         } else {
             return (m_Cursor =
-                (m_SynthesisBuffer + 3 * (LocX + LocY * m_Width))
+                (m_SynthesisBuffer + 4 * (LocX + LocY * m_Width))
                 );
         }
     }
@@ -292,7 +295,7 @@ public:
     //
     // DEFAULT CONSTRUCTOR:
     //
-    CRGB24Synthesizer (
+    CRGB32Synthesizer (
         BOOLEAN FlipVertical
         ) :
         m_FlipVertical (FlipVertical)
@@ -302,7 +305,7 @@ public:
     //
     // CONSTRUCTOR:
     //
-    CRGB24Synthesizer (
+    CRGB32Synthesizer (
         BOOLEAN FlipVertical,
         ULONG Width,
         ULONG Height
@@ -316,7 +319,7 @@ public:
     // DESTRUCTOR:
     //
     virtual
-    ~CRGB24Synthesizer (
+    ~CRGB32Synthesizer (
         )
     {
     }

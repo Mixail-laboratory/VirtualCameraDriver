@@ -1461,7 +1461,7 @@ Return Value:
 //
 const 
 KS_DATARANGE_VIDEO 
-FormatRGB24Bpp_Capture = {
+FormatRGB32Bpp_Capture = {
 
     //
     // KSDATARANGE
@@ -1469,12 +1469,11 @@ FormatRGB24Bpp_Capture = {
     {   
         sizeof (KS_DATARANGE_VIDEO),                // FormatSize
         0,                                          // Flags
-        D_X * D_Y * 3,                              // SampleSize
+        D_X * D_Y * 4,                              // SampleSize
         0,                                          // Reserved
 
         STATICGUIDOF (KSDATAFORMAT_TYPE_VIDEO),     // aka. MEDIATYPE_Video
-        0xe436eb7d, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 
-            0xaf, 0x0b, 0xa7, 0x70,                 // aka. MEDIASUBTYPE_RGB24,
+        0xe436eb7e, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70,                 // aka. MEDIASUBTYPE_RGB32,
         STATICGUIDOF (KSDATAFORMAT_SPECIFIER_VIDEOINFO) // aka. FORMAT_VideoInfo
     },
 
@@ -1507,8 +1506,8 @@ FormatRGB24Bpp_Capture = {
         0,              // ShrinkTapsY 
         333667,         // MinFrameInterval, 100 nS units
         640000000,      // MaxFrameInterval, 100 nS units
-        8 * 3 * 30 * D_X * D_Y,  // MinBitsPerSecond;
-        8 * 3 * 30 * D_X * D_Y   // MaxBitsPerSecond;
+        8 * 4 * 30 * D_X * D_Y,  // MinBitsPerSecond;
+        8 * 4 * 30 * D_X * D_Y   // MaxBitsPerSecond;
     }, 
         
     //
@@ -1517,16 +1516,16 @@ FormatRGB24Bpp_Capture = {
     {
         0,0,0,0,                            // RECT  rcSource; 
         0,0,0,0,                            // RECT  rcTarget; 
-        D_X * D_Y * 3 * 8 * 30,             // DWORD dwBitRate;
+        D_X * D_Y * 4 * 8 * 30,             // DWORD dwBitRate;
         0L,                                 // DWORD dwBitErrorRate; 
         333667,                             // REFERENCE_TIME  AvgTimePerFrame;   
         sizeof (KS_BITMAPINFOHEADER),       // DWORD biSize;
         D_X,                                // LONG  biWidth;
         D_Y,                                // LONG  biHeight;
         1,                                  // WORD  biPlanes;
-        24,                                 // WORD  biBitCount;
+        32,                                 // WORD  biBitCount;
         KS_BI_RGB,                          // DWORD biCompression;
-        D_X * D_Y * 3,                      // DWORD biSizeImage;
+        D_X * D_Y * 4,                      // DWORD biSizeImage;
         0,                                  // LONG  biXPelsPerMeter;
         0,                                  // LONG  biYPelsPerMeter;
         0,                                  // DWORD biClrUsed;
@@ -1539,6 +1538,7 @@ FormatRGB24Bpp_Capture = {
 //
 // This is the data range description of the YUY2 format we support.
 //
+
 const 
 KS_DATARANGE_VIDEO 
 FormatYUY2_Capture = {
@@ -1662,5 +1662,5 @@ const
 PKSDATARANGE 
 CapturePinDataRanges [CAPTURE_PIN_DATA_RANGE_COUNT] = {
     //(PKSDATARANGE) &FormatYUY2_Capture,
-    (PKSDATARANGE) &FormatRGB24Bpp_Capture
+    (PKSDATARANGE) &FormatRGB32Bpp_Capture
     };

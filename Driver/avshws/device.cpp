@@ -456,7 +456,7 @@ Return Value:
         //
         // Create the necessary type of image synthesizer.
         //
-        if (m_VideoInfoHeader -> bmiHeader.biBitCount == 24 &&
+        if (m_VideoInfoHeader -> bmiHeader.biBitCount == 32 &&
             m_VideoInfoHeader -> bmiHeader.biCompression == KS_BI_RGB) {
     
             //
@@ -465,7 +465,7 @@ Return Value:
             // height < 0.  Otherwise, it's upper left.
             //
             m_ImageSynth = new (NonPagedPoolNx, 'RysI') 
-                CRGB24Synthesizer (
+                CRGB32Synthesizer (
                     m_VideoInfoHeader -> bmiHeader.biHeight >= 0
                     );
     
