@@ -1,0 +1,21 @@
+{
+  "inputs": [
+    {
+      "input_number": 1,
+      "dest": "Camera1"
+
+    },
+    {
+      "input_number": 1,
+      "dest": "Camera7"
+
+    },
+    {
+      "input_number": 3,
+      "dest": "Camera8"
+
+    }
+
+
+  ]
+}
