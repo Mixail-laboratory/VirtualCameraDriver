@@ -1504,10 +1504,10 @@ FormatRGB32Bpp_Capture = {
         0,              // StretchTapsY
         0,              // ShrinkTapsX 
         0,              // ShrinkTapsY 
-        (10000000 / 60),         // MinFrameInterval, 100 nS units
+        333667,         // MinFrameInterval, 100 nS units
         640000000,      // MaxFrameInterval, 100 nS units
-        8 * 4 * 60 * D_X * D_Y,  // MinBitsPerSecond;
-        8 * 4 * 60 * D_X * D_Y   // MaxBitsPerSecond;
+        8 * 4 * 30 * D_X * D_Y,  // MinBitsPerSecond;
+        8 * 4 * 30 * D_X * D_Y   // MaxBitsPerSecond;
     }, 
         
     //
@@ -1516,9 +1516,9 @@ FormatRGB32Bpp_Capture = {
     {
         0,0,0,0,                            // RECT  rcSource; 
         0,0,0,0,                            // RECT  rcTarget; 
-        D_X * D_Y * 4 * 8 * 60,             // DWORD dwBitRate;
+        D_X * D_Y * 4 * 8 * 30,             // DWORD dwBitRate;
         0L,                                 // DWORD dwBitErrorRate; 
-        (10000000 / 7),                             // REFERENCE_TIME  AvgTimePerFrame;   
+        333667,                             // REFERENCE_TIME  AvgTimePerFrame;   
         sizeof (KS_BITMAPINFOHEADER),       // DWORD biSize;
         D_X,                                // LONG  biWidth;
         D_Y,                                // LONG  biHeight;

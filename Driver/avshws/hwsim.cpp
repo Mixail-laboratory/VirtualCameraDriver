@@ -745,7 +745,7 @@ FakeHardware (
 	if (m_HardwareState == HardwareRunning)
 	{
          //m_ImageSynth->SynthesizeBars(m_TemporaryBuffer);
-        memcpy(m_SynthesisBuffer, m_TemporaryBuffer, m_Width * m_Height * 4);
+        //memcpy(m_SynthesisBuffer, m_TemporaryBuffer, m_Width * m_Height * 4);
             
 		if (!NT_SUCCESS(FillScatterGatherBuffers())) {
 			InterlockedIncrement(PLONG(&m_NumFramesSkipped));
@@ -804,7 +804,7 @@ void CHardwareSimulation::SetData(PVOID data, ULONG dataLength)
 
 	for (ULONG y = 0; y < m_Height; y++)
 	{
-		PUCHAR buffer = m_TemporaryBuffer + ((m_Width * 4) * (m_Height - 1 - y));
+		PUCHAR buffer = m_SynthesisBuffer + ((m_Width * 4) * (m_Height - 1 - y));
 		PUCHAR dataLine = (PUCHAR)data + ((m_Width * 4) * y);
 
 		RtlCopyMemory(buffer, dataLine, m_Width * 4);
